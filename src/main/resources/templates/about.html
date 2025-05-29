@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <title>About</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <h1>About the Library</h1>
+      <div>
+        <p>This is the about page</p>
+        <p>
+          Here my four team members will be shown with their image, name, and
+          designation in card bodies.
+        </p>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card" style="width: 18rem">
+            <img
+              th:src="@{/images/1.jpg}"
+              class="card-img-top img-fluid"
+              style="height: 200px; object-fit: cover"
+              alt="MD Rezaul Karim"
+            />
+            <div class="card-body">
+              <h5 class="card-title">MD Rezaul Karim</h5>
+              <p class="card-text">Student ID: 2022000010009</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

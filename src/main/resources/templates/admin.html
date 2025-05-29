@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <title th:text="${pageTitle}">Admin</title>
+  </head>
+  <body>
+    <div layout:fragment="content" class="container mt-4">
+      <!-- Display flash messages -->
+      <div th:if="${message}" class="alert alert-info" role="alert">
+        <span th:text="${message}"></span>
+      </div>
+
+      <!-- Users Table -->
+      <h2>Users</h2>
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>SL No.</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>NID Number</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="user, iterStat : ${users}">
+            <td th:text="${iterStat.count}">1</td>
+            <td th:text="${user.fullName}">Full Name</td>
+            <td th:text="${user.email}">Email</td>
+            <td th:text="${user.phone}">Phone</td>
+            <td th:text="${user.nidNumber}">NID</td>
+            <td th:text="${user.status == 1 ? 'Active' : 'Inactive'}">
+              Status
+            </td>
+            <td>
+              <form
+                th:action="@{${user.status == 1} ? '/admin/deactivate-user/' + ${user.userId} : '/admin/activate-user/' + ${user.userId}}"
+                method="post"
+              >
+                <button
+                  type="submit"
+                  th:classappend="${user.status == 1} ? 'btn-warning' : 'btn-success'"
+                  class="btn btn-sm"
+                  th:text="${user.status == 1} ? 'Deactivate' : 'Activate'"
+                >
+                  Toggle
+                </button>
+              </form>
+            </td>
+          </tr>
+          <tr th:if="${users == null or users.isEmpty()}">
+            <td colspan="7" class="text-muted">No users found.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Books Table -->
+      <h2>Books</h2>
+      <a class="btn btn-primary btn-sm mb-2" th:href="@{/book/create}"
+        >Add Book</a
+      >
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>SL No.</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Copies Available</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="book, iterStat : ${books}">
+            <td th:text="${iterStat.count}">1</td>
+            <td th:text="${book.title}">Title</td>
+            <td th:text="${book.author}">Author</td>
+            <td th:text="${book.category.name}">Category</td>
+            <td th:text="${book.availableCopies}">0</td>
+          </tr>
+          <tr th:if="${books == null or books.isEmpty()}">
+            <td colspan="5" class="text-muted">No books found.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Borrow Book Requests Table -->
+      <h2>Borrow Book Requests</h2>
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>SL No.</th>
+            <th>Username</th>
+            <th>Book Title</th>
+            <th>Request Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="request, iterStat : ${borrowRequests}">
+            <td th:text="${iterStat.count}">1</td>
+            <td th:text="${request.user.fullName}">Full Name</td>
+            <td th:text="${request.book.title}">Book Title</td>
+            <td
+              th:text="${#temporals.format(request.requestDate, 'dd-MM-yyyy')}"
+            >
+              Date
+            </td>
+            <td th:text="${request.status}">Status</td>
+            <td>
+              <div th:if="${request.status == 'Pending'}">
+                <form
+                  th:action="@{/admin/approve-borrow-request(id=${request.borrowRequestId})}"
+                  method="post"
+                  style="display: inline"
+                >
+                  <button type="submit" class="btn btn-success btn-sm">
+                    Approve
+                  </button>
+                </form>
+                <form
+                  th:action="@{/admin/reject-borrow-request(id=${request.borrowRequestId})}"
+                  method="post"
+                  style="display: inline"
+                >
+                  <button type="submit" class="btn btn-danger btn-sm">
+                    Reject
+                  </button>
+                </form>
+              </div>
+              <div th:if="${request.status != 'Pending'}">
+                <span class="text-muted">No Action</span>
+              </div>
+            </td>
+          </tr>
+          <tr th:if="${borrowRequests == null or borrowRequests.isEmpty()}">
+            <td colspan="6" class="text-muted">No borrow requests found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

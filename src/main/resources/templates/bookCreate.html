@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title th:text="${pageTitle}">Create Book</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <h2 th:text="${pageTitle}">Create Book</h2>
+
+  <form th:action="@{/book/save}" th:object="${bookForm}" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input type="text" th:field="*{title}" class="form-control" id="title" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="author" class="form-label">Author</label>
+      <input type="text" th:field="*{author}" class="form-control" id="author" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea th:field="*{description}" class="form-control" id="description" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="totalCopies" class="form-label">Total Copies</label>
+      <input type="number" th:field="*{totalCopies}" class="form-control" id="totalCopies" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="publishedDate" class="form-label">Published Date</label>
+      <input type="date" th:field="*{publishedDate}" class="form-control" id="publishedDate">
+    </div>
+
+    <div class="mb-3">
+      <label for="category" class="form-label">Category</label>
+      <select th:field="*{category}" class="form-control" id="category" required>
+        <option value="" disabled selected>-- Select Category --</option>
+        <option th:each="cat : ${categories}" th:value="${cat.categoryId}" th:text="${cat.name}"></option>
+      </select>
+    </div>
+
+    <!--<div class="mb-3">
+      <label for="bookImage" class="form-label">Book Image</label>
+      <input type="file" name="bookImage" class="form-control" id="bookImage">
+    </div>-->
+
+    <button type="submit" class="btn btn-primary">Save Book</button>
+    <a th:href="@{/book}" class="btn btn-secondary ms-2">Cancel</a>
+  </form>
+</div>
+</body>
+</html>

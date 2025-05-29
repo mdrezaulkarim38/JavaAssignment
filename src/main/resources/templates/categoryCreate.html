@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <title>Category Category</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <h3>Create a New Category</h3>
+
+      <form th:action="@{/category/save}" th:object="${categoryForm}" method="post">
+
+        <input type="hidden" th:field="*{categoryId}" />
+
+        <div class="form-group">
+          <label for="categoryName" class="control-label">Category Name</label>
+          <input
+                  id="categoryName"
+                  name="categoryName"
+                  th:field="*{categoryName}"
+                  class="form-control"
+                  placeholder="Enter category name"
+          />
+          <span th:if="${#fields.hasErrors('categoryName')}" th:errors="*{categoryName}" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3"
+                th:text="${formMode == 'edit' ? 'Update Category' : 'Create Category'}">
+          Create Category
+        </button>
+        <a th:href="@{/categorylist}" class="btn btn-secondary mt-3">Back</a>
+      </form>
+    </div>
+  </body>
+</html>
